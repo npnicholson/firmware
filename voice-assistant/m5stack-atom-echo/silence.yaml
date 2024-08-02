@@ -2,9 +2,7 @@
 # Silence for the m5stack-atom-echo ESPHome voice assistant
 # @see: https://github.com/esphome/firmware/blob/main/wake-word-voice-assistant/m5stack-atom-echo.yaml
 # 
-# Silences the voice assistant by removing speaker, on_tts_steam_start, and on_tts_stream_end from 
-# the voice assistant component. Also waits for the voice assistant to be idle before restoring the
-# display to its idle page (this is normally done in on_tts_stream_end).
+# Silences the voice assistant by removing the speaker from the voice assistant component
 #
 # Created: August 2nd, 2024
 ####################################################################################################
@@ -15,7 +13,7 @@
 #   esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/m5stack-atom-echo.yaml@main
 #   silence: github://npnicholson/firmware/voice-assistant/m5stack-atom-echo/silence.yaml@master
 
-# Remove speaker, on_tts_steam_start, and on_tts_stream_end from the voice assistant
+# Remove the speaker from the voice assistant
 voice_assistant:
   id: va
   speaker: !remove
