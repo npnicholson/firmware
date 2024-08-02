@@ -1,0 +1,28 @@
+substitutions:
+  name: assistant-s3box-night-mode
+  friendly_name: Assistant S3Box With Night Mode
+packages:
+  # Uncomment for the Esp32-S3-Box-3
+  esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box-3.yaml@main
+
+  # Uncomment for the Esp32-S3-Box-Lite
+  # esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box-lite.yaml@main
+
+  # Uncomment for the Esp32-S3-Box
+  # esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box.yaml@main
+  
+  # Include the night-mode yaml from this repository
+  night-mode: github://npnicholson/firmware/voice-assistant/esp32-s3-box/night-mode.yaml@master
+
+esphome:
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
+api:
+  encryption:
+    key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  # Uncomment for a hidden ssid
+  # fast_connect: true
