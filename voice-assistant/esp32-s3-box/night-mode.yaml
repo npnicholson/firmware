@@ -60,6 +60,7 @@ switch:
     id: night_mode_switch
     icon: mdi:weather-night
     optimistic: True
+    restore_mode: RESTORE_DEFAULT_ON
 
     # When night mode is disabled, go ahead and turn the backlight back on
     on_turn_off: 
