@@ -1,0 +1,84 @@
+####################################################################################################
+# Night Mode Support for the esp32-s3-box-3 ESPHome voice assistant
+# @see: https://github.com/esphome/firmware/blob/main/wake-word-voice-assistant/esp32-s3-box-3.yaml
+# 
+# Created: August 2nd, 2024
+####################################################################################################
+
+binary_sensor:
+  - platform: template
+    id: night_mode_controller
+    internal: true
+
+    # Act when the voice assistant's is_running() state changes
+    # @see: https://esphome.io/api/classesphome_1_1voice__assistant_1_1_voice_assistant#ab6c4a2b1fa4a8590584ffd43096c59d8
+    lambda: |-
+      return id(va).is_running();
+
+    # If the voice assistant is in process (listening or doing something)
+    # Always turn on the light when the voice assistant wakes up, even in night mode
+    on_press: 
+      then:
+        light.turn_on:
+          id: led
+          transition_length: 0.5s
+
+    # If the voice assistant is done (idle)
+    on_release: 
+      then:
+        - script.execute: night_mode_light_off
+
+script:
+  - id: night_mode_light_off
+    # If this script is run again before the delay is finished, stop this instance and restart it.
+    mode: restart
+    # Only turn the light off if night mode is enabled
+    then:
+      - delay: 2s
+      
+      # Make sure if the voice assistant isnt running, the display is set to the idle state. This is to 
+      # fix an issue that comes up if the speaker is disabled
+      - if: 
+          condition: 
+            and:
+              - not:
+                - voice_assistant.is_running:
+              - lambda: |-
+                  return id(voice_assistant_phase) != ${voice_assist_idle_phase_id};       
+          then:
+            - lambda: |-
+                id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+            - script.execute: draw_display
+
+      # Turn the light off if night mode is enabled AND the voice assistant is idle still (after the 2 second delay)
+      - if: 
+          condition: 
+            and: 
+              - switch.is_on: night_mode_switch
+              - not:
+                  - voice_assistant.is_running:
+          then:
+            - light.turn_off:
+                id: led
+                transition_length: 1s
+
+switch:
+  - platform: template
+    name: Night Mode
+    id: night_mode_switch
+    icon: mdi:weather-night
+    optimistic: True
+
+    # When night mode is disabled, go ahead and turn the backlight back on
+    on_turn_off: 
+      then:
+        light.turn_on: led
+
+    # When night mode is enabled, turn the light off if home assistant isn't running at the moment
+    on_turn_on:
+      if:
+        condition:
+          not:
+            voice_assistant.is_running:
+        then:
+          light.turn_off: led
