@@ -2,6 +2,10 @@
 # Night Mode Support for the esp32-s3-box variants ESPHome voice assistant
 # @see: https://github.com/esphome/firmware/blob/main/wake-word-voice-assistant/esp32-s3-box-3.yaml
 # 
+# Adds a night mode switch to the voice assistant. When night mode is enabled, the display will
+# remain off until the voice assistant becomes active. When the voice assistant is idle again, the
+# display is turned off
+# 
 # Created: August 2nd, 2024
 ####################################################################################################
 
