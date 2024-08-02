@@ -1,5 +1,5 @@
 ####################################################################################################
-# Silence for the esp32-s3-box-3 ESPHome voice assistant
+# Silence for the esp32-s3-box variants ESPHome voice assistant
 # @see: https://github.com/esphome/firmware/blob/main/wake-word-voice-assistant/esp32-s3-box-3.yaml
 # 
 # Created: August 2nd, 2024
@@ -9,7 +9,7 @@
 # Include this file as a package under the voice assistant yaml as shown below
 # packages:
 #   esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box-3.yaml@main
-#   silence: github://npnicholson/firmware/voice-assistant/silence.yaml@master
+#   silence: github://npnicholson/firmware/voice-assistant/esp32-s3-box/silence.yaml@master
 
 binary_sensor:
   - platform: template

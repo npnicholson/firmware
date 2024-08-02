@@ -1,2 +1,2 @@
 # firmware
-ESPHome Firmware
+Custom ESPHome Firmware
