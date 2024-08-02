@@ -1,0 +1,19 @@
+substitutions:
+  name: assistant-m5stack-echo-silenced
+  friendly_name: Assistant M5Stack Echo Silenced
+packages:
+  esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/m5stack-atom-echo.yaml@main
+  silence: github://npnicholson/firmware/voice-assistant/m5stack-atom-echo/silence.yaml@master
+
+esphome:
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
+api:
+  encryption:
+    key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  # Uncomment for a hidden ssid
+  # fast_connect: true
