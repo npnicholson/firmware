@@ -11,6 +11,43 @@
 #   esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box-3.yaml@main
 #   silence: github://npnicholson/firmware/voice-assistant/silence.yaml@master
 
+binary_sensor:
+  - platform: template
+    id: silence_controller
+    internal: true
+
+    # Act when the voice assistant's is_running() state changes
+    # @see: https://esphome.io/api/classesphome_1_1voice__assistant_1_1_voice_assistant#ab6c4a2b1fa4a8590584ffd43096c59d8
+    lambda: |-
+      return id(va).is_running();
+
+    # If the voice assistant is done (idle)
+    on_release: 
+      then:
+        - script.execute: silence_script
+
+script:
+  - id: silence_script
+    # If this script is run again before the delay is finished, stop this instance and restart it.
+    mode: restart
+    # Only turn the light off if night mode is enabled
+    then:
+      - delay: 2s
+      
+      # Make sure if the voice assistant isn't running, the display is set to the idle state. This is to 
+      # fix an issue that comes up if the speaker is disabled
+      - if: 
+          condition: 
+            and:
+              - not:
+                - voice_assistant.is_running:
+              - lambda: |-
+                  return id(voice_assistant_phase) != ${voice_assist_idle_phase_id};       
+          then:
+            - lambda: |-
+                id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+            - script.execute: draw_display
+
 voice_assistant:
   id: va
   speaker: !remove

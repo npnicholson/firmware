@@ -41,20 +41,6 @@ script:
     # Only turn the light off if night mode is enabled
     then:
       - delay: 2s
-      
-      # Make sure if the voice assistant isnt running, the display is set to the idle state. This is to 
-      # fix an issue that comes up if the speaker is disabled
-      - if: 
-          condition: 
-            and:
-              - not:
-                - voice_assistant.is_running:
-              - lambda: |-
-                  return id(voice_assistant_phase) != ${voice_assist_idle_phase_id};       
-          then:
-            - lambda: |-
-                id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
-            - script.execute: draw_display
 
       # Turn the light off if night mode is enabled AND the voice assistant is idle still (after the 2 second delay)
       - if: 
