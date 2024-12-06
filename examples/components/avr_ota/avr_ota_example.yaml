@@ -1,0 +1,79 @@
+esphome:
+  name: avr_ota_example
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+  variant: esp32s3
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+ota:
+  - platform: esphome
+    password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  fast_connect: True
+
+captive_portal:
+
+# Main avr_ota component
+avr_ota:
+  id: avr
+  restore_mode: ALWAYS_OFF
+  avr_enable_output: avr_enable
+
+  # Example which disables the AVR OTA socket after each operation
+  on_avr_idle:
+    then:
+      - avr_ota.disable: avr
+
+# SPI interface for the AVR. Should be connect to the AVR ISP Port or GPIO pins
+spi:
+  - clk_pin: GPIOXX
+    miso_pin: GPIOXX
+    mosi_pin: GPIOXX
+
+# GPIO output for the AVR enable/reset pin. Should be AVR active when high
+output:
+  - platform: gpio
+    id: avr_enable
+    pin: GPIO02
+
+# Template sensor to detect if the AVR OTA socket is running
+binary_sensor:
+  - platform: template
+    id: avr_enabled
+    condition:
+      avr_ota.is_enabled:
+        id: avr
+
+# Example switch for the AVR OTA Socket.
+switch:
+  - platform: template
+    name: AVR Programmer
+    lambda: |-
+      if (id(avr_enabled).state) return true;
+      else return false;
+    turn_on_action: 
+      then: 
+        - avr_ota.enable: avr
+    turn_off_action:
+      then: 
+        - avr_ota.disable: avr
+
+# Example button for resetting the AVR co-processor
+button:
+  - platform: template
+    name: Restart AVR
+    on_press:
+      then:
+        - avr_ota.reset: avr
+  - platform: restart
+    name: Restart ESP32
