@@ -7,6 +7,14 @@ esp32:
     type: arduino
   variant: esp32s3
 
+external_components:
+  - source:
+      type: git
+      url: https://github.com/npnicholson/firmware
+      ref: master
+    components: [ i2c_light ]
+    refresh: 0s
+
 # Enable Home Assistant API
 api:
   encryption:

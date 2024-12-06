@@ -7,6 +7,14 @@ esp32:
     type: arduino
   variant: esp32s3
 
+external_components:
+  - source:
+      type: git
+      url: https://github.com/npnicholson/firmware
+      ref: master
+    components: [ avr_ota ]
+    refresh: 0s
+
 # Enable Home Assistant API
 api:
   encryption:
@@ -58,6 +66,7 @@ binary_sensor:
 switch:
   - platform: template
     name: AVR Programmer
+    entity_category: config
     lambda: |-
       if (id(avr_enabled).state) return true;
       else return false;
@@ -72,6 +81,7 @@ switch:
 button:
   - platform: template
     name: Restart AVR
+    entity_category: config
     on_press:
       then:
         - avr_ota.reset: avr
