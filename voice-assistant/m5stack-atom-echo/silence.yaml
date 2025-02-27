@@ -14,6 +14,14 @@
 #   silence: github://npnicholson/firmware/voice-assistant/m5stack-atom-echo/silence.yaml@master
 
 # Remove the speaker from the voice assistant
-voice_assistant:
-  id: va
-  speaker: !remove
+# voice_assistant:
+#   id: va
+#   speaker: !remove
+
+# Set the min and max volume of the speaker to 0 to mute it
+media_player:
+  - platform: speaker
+    name: None
+    id: speaker_media_player
+    volume_min: 0.0
+    volume_max: 0.0

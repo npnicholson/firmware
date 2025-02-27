@@ -15,46 +15,54 @@
 #   esphome.voice-assistant: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box-3.yaml@main
 #   silence: github://npnicholson/firmware/voice-assistant/esp32-s3-box/silence.yaml@master
 
-binary_sensor:
-  - platform: template
-    id: silence_controller
-    internal: true
+# binary_sensor:
+#   - platform: template
+#     id: silence_controller
+#     internal: true
 
-    # Act when the voice assistant's is_running() state changes
-    # @see: https://esphome.io/api/classesphome_1_1voice__assistant_1_1_voice_assistant#ab6c4a2b1fa4a8590584ffd43096c59d8
-    lambda: |-
-      return id(va).is_running();
+#     # Act when the voice assistant's is_running() state changes
+#     # @see: https://esphome.io/api/classesphome_1_1voice__assistant_1_1_voice_assistant#ab6c4a2b1fa4a8590584ffd43096c59d8
+#     lambda: |-
+#       return id(va).is_running();
 
-    # If the voice assistant is done (idle)
-    on_release: 
-      then:
-        - script.execute: silence_script
+#     # If the voice assistant is done (idle)
+#     on_release: 
+#       then:
+#         - script.execute: silence_script
 
-script:
-  - id: silence_script
-    # If this script is run again before the delay is finished, stop this instance and restart it.
-    mode: restart
-    # Only turn the light off if night mode is enabled
-    then:
-      - delay: 2s
+# script:
+#   - id: silence_script
+#     # If this script is run again before the delay is finished, stop this instance and restart it.
+#     mode: restart
+#     # Only turn the light off if night mode is enabled
+#     then:
+#       - delay: 2s
       
-      # Make sure if the voice assistant isn't running, the display is set to the idle state. This is to 
-      # fix an issue that comes up if the speaker is disabled
-      - if: 
-          condition: 
-            and:
-              - not:
-                - voice_assistant.is_running:
-              - lambda: |-
-                  return id(voice_assistant_phase) != ${voice_assist_idle_phase_id};       
-          then:
-            - lambda: |-
-                id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
-            - script.execute: draw_display
+#       # Make sure if the voice assistant isn't running, the display is set to the idle state. This is to 
+#       # fix an issue that comes up if the speaker is disabled
+#       - if: 
+#           condition: 
+#             and:
+#               - not:
+#                 - voice_assistant.is_running:
+#               - lambda: |-
+#                   return id(voice_assistant_phase) != ${voice_assist_idle_phase_id};       
+#           then:
+#             - lambda: |-
+#                 id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+#             - script.execute: draw_display
+
+# Set the min and max volume of the speaker to 0 to mute it
+media_player:
+  - platform: speaker
+    name: None
+    id: speaker_media_player
+    volume_min: 0.0
+    volume_max: 0.0
 
 # Remove speaker, on_tts_steam_start, and on_tts_stream_end from the voice assistant
-voice_assistant:
-  id: va
-  speaker: !remove
-  on_tts_stream_start: !remove
-  on_tts_stream_end: !remove
+# voice_assistant:
+#   id: va
+#   media_player: !remove
+#   on_tts_stream_start: !remove
+#   on_tts_stream_end: !remove
