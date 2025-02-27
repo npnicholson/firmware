@@ -55,8 +55,7 @@
 # Set the min and max volume of the speaker to 0 to mute it
 media_player:
   - platform: speaker
-    name: None
-    id: speaker_media_player
+    id: !extend speaker_media_player
     volume_min: 0.0
     volume_max: 0.0
 

@@ -22,6 +22,6 @@
 media_player:
   - platform: speaker
     name: None
-    id: echo_media_player
+    id: !extend echo_media_player
     volume_min: 0.0
     volume_max: 0.0
