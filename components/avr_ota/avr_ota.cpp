@@ -501,8 +501,8 @@ uint8_t AVROTAComponent::write_flash_pages(int length) {
       commit(page);
       page = addr_page(here);
     }
-    flash(LOW, here, buff[x++]);
-    flash(HIGH, here, buff[x++]);
+    flash(0, here, buff[x++]);
+    flash(1, here, buff[x++]);
     here++;
   }
   commit(page);
@@ -534,7 +534,7 @@ uint8_t AVROTAComponent::write_eeprom_chunk(int start, int length) {
   // this writes byte-by-byte,
   // page writing may be faster (4 bytes at a time)
   fill(length);
-  // prog_lamp(LOW);
+  // prog_lamp(0);
   for (int x = 0; x < length; x++) {
     int addr = start + x;
     spi_transaction(0xC0, (addr >> 8) & 0xFF, addr & 0xFF, buff[x]);
@@ -542,7 +542,7 @@ uint8_t AVROTAComponent::write_eeprom_chunk(int start, int length) {
     yield();
     delay(45);
   }
-  // prog_lamp(HIGH);
+  // prog_lamp(1);
   return Resp_STK_OK;
 }
 
@@ -591,8 +591,8 @@ void AVROTAComponent::flash_read_page(int length) {
   // ESP_LOGI(TAG, "[AVRISP] Flash Read Page");
   uint8_t *data = (uint8_t *) malloc(length + 1);
   for (int x = 0; x < length; x += 2) {
-    *(data + x) = flash_read(LOW, here);
-    *(data + x + 1) = flash_read(HIGH, here);
+    *(data + x) = flash_read(0, here);
+    *(data + x + 1) = flash_read(1, here);
     here++;
     App.feed_wdt();
   }
