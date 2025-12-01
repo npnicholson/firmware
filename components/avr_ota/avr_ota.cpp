@@ -42,8 +42,8 @@ bool AVROTAComponent::enable_avr() {
   bool res = this->socket.start();
   if (res) {
     ESP_LOGI(TAG, "Started Web Socket:");
-    ESP_LOGI(TAG, "  Address: %s:%u", network::get_use_address().c_str(), this->port_);
-    ESP_LOGI(TAG, "  $ avrdude -c stk500v1 -p m328p -P net:%s:%u -b 19200 ...", network::get_use_address().c_str(),
+    ESP_LOGI(TAG, "  Address: %s:%u", network::get_use_address(), this->port_);
+    ESP_LOGI(TAG, "  $ avrdude -c stk500v1 -p m328p -P net:%s:%u -b 19200 ...", network::get_use_address(), 
             this->port_);
     
     this->store_state();
@@ -161,8 +161,8 @@ void AVROTAComponent::setup() {
 // Dump Config from Component
 void AVROTAComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "AVR Update Port:");
-  ESP_LOGCONFIG(TAG, "  Address: %s:%u", network::get_use_address().c_str(), this->port_);
-  ESP_LOGCONFIG(TAG, "  $ avrdude -c stk500v1 -p m328p -P net:%s:%u -b 19200 ...", network::get_use_address().c_str(),
+  ESP_LOGCONFIG(TAG, "  Address: %s:%u", network::get_use_address(), this->port_);
+  ESP_LOGCONFIG(TAG, "  $ avrdude -c stk500v1 -p m328p -P net:%s:%u -b 19200 ...", network::get_use_address(),
                 this->port_);
 }
 
