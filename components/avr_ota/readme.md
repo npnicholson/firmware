@@ -124,3 +124,10 @@ avrdude -c stk500v1 -p m328p -P net:<ESP_IP>:328 -b 19200 -U flash:w:firmware.he
 ```
 
 Replace `<ESP_IP>` with the IP address of the ESP32 and adjust `-p` for your target AVR device.
+
+## Acknowledgments
+
+This component is based on the following projects:
+
+- **[OTA_update_AVR_using_ESP32](https://github.com/ESP32-Musings/OTA_update_AVR_using_ESP32)** by Laukik Hase — MIT License
+- **[ESP_AVRISP](https://github.com/lbernstone/ESP_AVRISP)** by Larry Bernstone — BSD License, based on ArduinoISP by Randall Bohn with WiFi support by Kiril Zyapkov
